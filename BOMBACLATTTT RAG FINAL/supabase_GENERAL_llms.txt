@@ -1,0 +1,1354 @@
+TITLE: Initializing Supabase Project with CLI
+DESCRIPTION: Commands to initialize a Supabase project and start a local Postgres instance using Docker
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/ai/vecs-python-client.mdx#2025-04-21_snippet_0
+
+LANGUAGE: bash
+CODE:
+```
+# Initialize your project
+supabase init
+
+# Start Postgres
+supabase start
+```
+
+----------------------------------------
+
+TITLE: Signing Out User with Supabase Auth (JavaScript)
+DESCRIPTION: Shows how to log out the currently authenticated user from the Supabase session. It calls the simple `supabase.auth.signOut()` method, which clears the local session and invalidates the user's token. Required: Supabase client initialized and a user session active.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/platform/manage-your-usage/monthly-active-users-sso.mdx#_snippet_1
+
+LANGUAGE: javascript
+CODE:
+```
+const {error} = await supabase.auth.signOut()
+```
+
+----------------------------------------
+
+TITLE: Initializing Supabase Client
+DESCRIPTION: Creates a Supabase client instance using project URL and anonymous key for authentication.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/www/_blog/2021-03-11-using-supabase-replit.mdx#2025-04-21_snippet_1
+
+LANGUAGE: jsx
+CODE:
+```
+const supabase = createClient(
+  'https://ajsstlnzcmdmzbtcgbbd.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+)
+```
+
+----------------------------------------
+
+TITLE: Implementing User Management with Security Definer in Supabase
+DESCRIPTION: Complete example of setting up a secure user management system with proper table structure, trigger function with security definer, and trigger creation for handling new users.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/troubleshooting/dashboard-errors-when-managing-users-N1ls4A.mdx#2025-04-21_snippet_1
+
+LANGUAGE: sql
+CODE:
+```
+create table profiles (
+  id uuid references auth.users on delete cascade not null primary key,
+  updated_at timestamp with time zone,
+  username text unique,
+  full_name text,
+  avatar_url text,
+  website text,
+
+  constraint username_length check (char_length(username) >= 3)
+);
+
+create function public.handle_new_user()
+returns trigger as $$
+begin
+  insert into public.profiles (id, full_name, avatar_url)
+  values (new.id, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'avatar_url');
+  return new;
+end;
+$$ language plpgsql security definer;
+
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
+```
+
+----------------------------------------
+
+TITLE: Implementing Row Level Security Policy in Supabase
+DESCRIPTION: Example of creating a Row Level Security (RLS) policy in Supabase that restricts users to viewing only their own documents. This policy is enforced across all access methods including REST API and edge functions.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/www/_alternatives/supabase-vs-auth0.mdx#2025-04-21_snippet_0
+
+LANGUAGE: sql
+CODE:
+```
+create policy "Users can only view their own documents."
+on docs for select
+using ( (select auth.uid()) = user_id );
+```
+
+----------------------------------------
+
+TITLE: Initializing Supabase Client
+DESCRIPTION: Setup and initialize the Supabase client with project URL and API key across different programming languages
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/realtime/broadcast.mdx#2025-04-21_snippet_0
+
+LANGUAGE: javascript
+CODE:
+```
+import { createClient } from '@supabase/supabase-js'
+
+const SUPABASE_URL = 'https://<project>.supabase.co'
+const SUPABASE_KEY = '<your-anon-key>'
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
+```
+
+LANGUAGE: dart
+CODE:
+```
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+void main() async {
+  Supabase.initialize(
+    url: 'https://<project>.supabase.co',
+    anonKey: '<your-anon-key>',
+  );
+  runApp(MyApp());
+}
+
+final supabase = Supabase.instance.client;
+```
+
+LANGUAGE: swift
+CODE:
+```
+import Supabase
+
+let SUPABASE_URL = "https://<project>.supabase.co"
+let SUPABASE_KEY = "<your-anon-key>"
+
+let supabase = SupabaseClient(supabaseURL: URL(string: SUPABASE_URL)!, supabaseKey: SUPABASE_KEY)
+```
+
+LANGUAGE: kotlin
+CODE:
+```
+val supabaseUrl = "https://<project>.supabase.co"
+val supabaseKey = "<your-anon-key>"
+val supabase = createSupabaseClient(supabaseUrl, supabaseKey) {
+    install(Realtime)
+}
+```
+
+LANGUAGE: python
+CODE:
+```
+from supabase import create_client
+
+URL = "https://<project>.supabase.co"
+KEY = "<your-anon-key>"
+supabase = create_client(URL, KEY)
+```
+
+----------------------------------------
+
+TITLE: Handling Authentication Client Component in JavaScript
+DESCRIPTION: This JavaScript code snippet showcases a client-side component for handling user authentication in a Next.js application using Supabase. The component manages user sign-ups, sign-ins, and sign-outs by triggering corresponding methods on a Supabase client. It connects to browser event handlers, updating the internal state and refreshing the page after authentication actions. The dependencies include @supabase/auth-helpers-nextjs and next/navigation.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/auth/auth-helpers/nextjs.mdx#2025-04-21_snippet_6
+
+LANGUAGE: JavaScript
+CODE:
+```
+'use client'
+
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+
+export default function Login() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const router = useRouter()
+  const supabase = createClientComponentClient()
+
+  const handleSignUp = async () => {
+    await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${location.origin}/auth/callback`,
+      },
+    })
+    router.refresh()
+  }
+
+  const handleSignIn = async () => {
+    await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+    router.refresh()
+  }
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut()
+    router.refresh()
+  }
+
+  return (
+    <>
+      <input name="email" onChange={(e) => setEmail(e.target.value)} value={email} />
+      <input
+        type="password"
+        name="password"
+        onChange={(e) => setPassword(e.target.value)}
+        value={password}
+      />
+      <button onClick={handleSignUp}>Sign up</button>
+      <button onClick={handleSignIn}>Sign in</button>
+      <button onClick={handleSignOut}>Sign out</button>
+    </>
+  )
+}
+
+```
+
+----------------------------------------
+
+TITLE: Creating User Profiles Table with Row Level Security in SQL
+DESCRIPTION: Creates a 'profiles' table with user details and implements Row Level Security policies for viewing, inserting, and updating profiles. Includes constraints and references to auth.users.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/_partials/user_management_quickstart_sql_template.mdx#2025-04-21_snippet_0
+
+LANGUAGE: sql
+CODE:
+```
+-- Create a table for public profiles
+create table profiles (
+  id uuid references auth.users not null primary key,
+  updated_at timestamp with time zone,
+  username text unique,
+  full_name text,
+  avatar_url text,
+  website text,
+
+  constraint username_length check (char_length(username) >= 3)
+);
+-- Set up Row Level Security (RLS)
+-- See https://supabase.com/docs/guides/database/postgres/row-level-security for more details.
+alter table profiles
+  enable row level security;
+
+create policy "Public profiles are viewable by everyone." on profiles
+  for select using (true);
+
+create policy "Users can insert their own profile." on profiles
+  for insert with check ((select auth.uid()) = id);
+
+create policy "Users can update own profile." on profiles
+  for update using ((select auth.uid()) = id);
+```
+
+----------------------------------------
+
+TITLE: Creating Sign-up Route Handler in TypeScript
+DESCRIPTION: This TypeScript code example provides a server-side route handler for signing up users in a Next.js application using Supabase. It involves processing a POST request with form data, utilizing a type-safe Supabase client to handle user registration, and redirecting the user afterward. It requires @supabase/auth-helpers-nextjs and next/headers packages, and includes TypeScript type definitions for better type checking.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/auth/auth-helpers/nextjs.mdx#2025-04-21_snippet_9
+
+LANGUAGE: TypeScript
+CODE:
+```
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from 'next/headers'
+import { NextResponse } from 'next/server'
+
+import type { Database } from '@/lib/database.types'
+
+export async function POST(request: Request) {
+  const requestUrl = new URL(request.url)
+  const formData = await request.formData()
+  const email = String(formData.get('email'))
+  const password = String(formData.get('password'))
+  const cookieStore = cookies()
+  const supabase = createRouteHandlerClient<Database>({ cookies: () => cookieStore })
+
+  await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: `${requestUrl.origin}/auth/callback`,
+    },
+  })
+
+  return NextResponse.redirect(requestUrl.origin, {
+    status: 301,
+  })
+}
+
+```
+
+----------------------------------------
+
+TITLE: Authentication with Password in Supabase.js v2
+DESCRIPTION: Example of signing in with email and password using the new signInWithPassword() method in Supabase.js v2.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/docs/ref/javascript/release-notes.mdx#2025-04-21_snippet_9
+
+LANGUAGE: ts
+CODE:
+```
+const { data } = await supabase.auth.signInWithPassword({
+  email: 'hello@example',
+  password: 'pass',
+})
+```
+
+----------------------------------------
+
+TITLE: Signing Out - JavaScript
+DESCRIPTION: This JavaScript snippet shows how to sign out users from the Instagram account using the Supabase client. The `signOut()` method is called to remove the user from the session.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/auth/social-login/auth-discord.mdx#2025-04-21_snippet_3
+
+LANGUAGE: javascript
+CODE:
+```
+import { createClient } from '@supabase/supabase-js'\nconst supabase = createClient('https://your-project-id.supabase.co', 'your-anon-key')\n// ---cut---\nasync function signOut() {\n  const { error } = await supabase.auth.signOut()\n}
+```
+
+----------------------------------------
+
+TITLE: Signing Out - Flutter
+DESCRIPTION: This Flutter snippet demonstrates how to sign out users from the Instagram account using the Supabase client. The `signOut()` method is called to remove the user from the session.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/auth/social-login/auth-discord.mdx#2025-04-21_snippet_4
+
+LANGUAGE: dart
+CODE:
+```
+Future<void> signOut() async {\n  await supabase.auth.signOut();\n}
+```
+
+----------------------------------------
+
+TITLE: Configuring Environment Variables for Supabase in Next.js
+DESCRIPTION: The purpose of this snippet is to set the required environment variables for connecting a Next.js application with a Supabase project. These variables are crucial for initializing the Supabase client. Ensure that 'NEXT_PUBLIC_SUPABASE_URL' and 'NEXT_PUBLIC_SUPABASE_ANON_KEY' are set with correct values which can be obtained from the Supabase dashboard or a local instance.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/ui-library/content/docs/nextjs/social-auth.mdx#2025-04-21_snippet_0
+
+LANGUAGE: env
+CODE:
+```
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+```
+
+----------------------------------------
+
+TITLE: Creating Supabase Client - JavaScript
+DESCRIPTION: This snippet initializes a Supabase client in a SvelteKit application using JavaScript. It creates an async load function that fetches the session information and returns both the client and session to the parent layout. Dependencies include '@supabase/auth-helpers-sveltekit' and environment variables for Supabase URL and anon key.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/auth/auth-helpers/sveltekit.mdx#2025-04-21_snippet_9
+
+LANGUAGE: javascript
+CODE:
+```
+// src/routes/+layout.js
+import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public'
+import { createSupabaseLoadClient } from '@supabase/auth-helpers-sveltekit'
+
+export const load = async ({ fetch, data, depends }) => {
+  depends('supabase:auth')
+
+  const supabase = createSupabaseLoadClient({
+    supabaseUrl: PUBLIC_SUPABASE_URL,
+    supabaseKey: PUBLIC_SUPABASE_ANON_KEY,
+    event: { fetch },
+    serverSession: data.session,
+  })
+
+  /**
+   * It's fine to use `getSession` here, because on the client, `getSession` is
+   * safe, and on the server, it reads `session` from the `LayoutData`, which
+   * safely checked the session using `safeGetSession`.
+   */
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  return { supabase, session }
+}
+```
+
+----------------------------------------
+
+TITLE: Initializing Supabase Client in Dart
+DESCRIPTION: This snippet shows how to initialize the Supabase client in a Dart application using the project URL and anonymous API key.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/realtime/presence.mdx#2025-04-21_snippet_1
+
+LANGUAGE: dart
+CODE:
+```
+void main() {
+  Supabase.initialize(
+    url: 'https://<project>.supabase.co',
+    anonKey: '<your-anon-key>',
+  );
+
+  runApp(MyApp());
+}
+
+final supabase = Supabase.instance.client;
+```
+
+----------------------------------------
+
+TITLE: Implementing Authentication Middleware in JavaScript
+DESCRIPTION: Setting up Next.js middleware to handle Supabase authentication session management.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/auth/auth-helpers/nextjs.mdx#2025-04-21_snippet_2
+
+LANGUAGE: javascript
+CODE:
+```
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
+import { NextResponse } from 'next/server'
+
+export async function middleware(req) {
+  const res = NextResponse.next()
+
+  // Create a Supabase client configured to use cookies
+  const supabase = createMiddlewareClient({ req, res })
+
+  // Refresh session if expired - required for Server Components
+  await supabase.auth.getUser()
+
+  return res
+}
+
+// Ensure the middleware is only called for relevant paths.
+export const config = {
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico).*)',
+  ],
+}
+```
+
+----------------------------------------
+
+TITLE: Creating and Securing User Profiles with PostgreSQL Row Level Security in Supabase
+DESCRIPTION: SQL script for setting up a profiles table with proper row-level security policies. It creates a table linked to auth.users, adds security policies for viewing, inserting, and updating profiles, configures Supabase Realtime, and sets up Storage for avatar images.
+SOURCE: https://github.com/supabase/supabase/blob/master/examples/user-management/sveltekit-user-management/README.md#2025-04-21_snippet_0
+
+LANGUAGE: sql
+CODE:
+```
+-- Create a table for Public Profiles
+create table profiles (
+  id uuid references auth.users not null,
+  updated_at timestamp with time zone,
+  username text unique,
+  avatar_url text,
+  website text,
+  primary key (id),
+  unique(username),
+  constraint username_length check (char_length(username) >= 3)
+);
+alter table profiles enable row level security;
+create policy "Public profiles are viewable by everyone."
+  on profiles for select
+  using ( true );
+create policy "Users can insert their own profile."
+  on profiles for insert
+  with check ( (select auth.uid()) = id );
+create policy "Users can update own profile."
+  on profiles for update
+  using ( (select auth.uid()) = id );
+-- Set up Realtime!
+begin;
+  drop publication if exists supabase_realtime;
+  create publication supabase_realtime;
+commit;
+alter publication supabase_realtime add table profiles;
+-- Set up Storage!
+insert into storage.buckets (id, name)
+values ('avatars', 'avatars');
+create policy "Avatar images are publicly accessible."
+  on storage.objects for select
+  using ( bucket_id = 'avatars' );
+create policy "Anyone can upload an avatar."
+  on storage.objects for insert
+  with check ( bucket_id = 'avatars' );
+```
+
+----------------------------------------
+
+TITLE: Configuring Supabase Client for Client-Side with Cookies
+DESCRIPTION: Configuration code to set up Supabase client to use cookies instead of localStorage for session management in the browser. This enables consistent authentication between server and client environments.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/www/_blog/2023-11-01-supabase-is-now-compatible-with-nextjs-14.mdx#2025-04-21_snippet_4
+
+LANGUAGE: tsx
+CODE:
+```
+const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    flowType: 'pkce',
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+    persistSession: true,
+    storage: {
+      getItem: async (key: string) => {
+        return parse(document.cookie[key])
+      },
+      setItem: async (key: string, value: string) => {
+        document.cookie = serialize(key, value)
+      },
+    },
+    removeItem: async (key: string) => {
+      document.cookie = serialize(key, '', {
+        maxAge: 0,
+      })
+    },
+  },
+})
+```
+
+----------------------------------------
+
+TITLE: Implementing Profile View with Image Selection and Update (SwiftUI, Supabase)
+DESCRIPTION: This SwiftUI View (`ProfileView`) allows users to view and edit their profile information, including username, full name, website, and avatar image. It integrates `PhotosPicker` for selecting a new avatar, handles image loading, and provides functions to fetch the initial profile data, update the profile in the Supabase database, and upload the selected avatar image to Supabase Storage. It manages loading state and includes sign-out functionality.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/getting-started/tutorials/with-swift.mdx#_snippet_6
+
+LANGUAGE: Swift
+CODE:
+```
+import PhotosUI
+import Storage
+import Supabase
+import SwiftUI
+
+struct ProfileView: View {
+  @State var username = ""
+  @State var fullName = ""
+  @State var website = ""
+
+  @State var isLoading = false
+
+ @State var imageSelection: PhotosPickerItem?
+ @State var avatarImage: AvatarImage?
+
+  var body: some View {
+    NavigationStack {
+      Form {
+        Section {
+          HStack {
+            Group {
+              if let avatarImage {
+                avatarImage.image.resizable()
+              } else {
+                Color.clear
+              }
+            }
+            .scaledToFit()
+            .frame(width: 80, height: 80)
+
+            Spacer()
+
+            PhotosPicker(selection: $imageSelection, matching: .images) {
+              Image(systemName: "pencil.circle.fill")
+                .symbolRenderingMode(.multicolor)
+                .font(.system(size: 30))
+                .foregroundColor(.accentColor)
+            }
+          }
+        }
+
+        Section {
+          TextField("Username", text: $username)
+            .textContentType(.username)
+            .textInputAutocapitalization(.never)
+          TextField("Full name", text: $fullName)
+            .textContentType(.name)
+          TextField("Website", text: $website)
+            .textContentType(.URL)
+            .textInputAutocapitalization(.never)
+        }
+
+        Section {
+          Button("Update profile") {
+            updateProfileButtonTapped()
+          }
+          .bold()
+
+          if isLoading {
+            ProgressView()
+          }
+        }
+      }
+      .navigationTitle("Profile")
+      .toolbar(content: {
+        ToolbarItem {
+          Button("Sign out", role: .destructive) {
+            Task {
+              try? await supabase.auth.signOut()
+            }
+          }
+        }
+      })
+      .onChange(of: imageSelection) { _, newValue in
+        guard let newValue else { return }
+        loadTransferable(from: newValue)
+      }
+    }
+    .task {
+      await getInitialProfile()
+    }
+  }
+
+  func getInitialProfile() async {
+    do {
+      let currentUser = try await supabase.auth.session.user
+
+      let profile: Profile =
+      try await supabase
+        .from("profiles")
+        .select()
+        .eq("id", value: currentUser.id)
+        .single()
+        .execute()
+        .value
+
+      username = profile.username ?? ""
+      fullName = profile.fullName ?? ""
+      website = profile.website ?? ""
+
+      if let avatarURL = profile.avatarURL, !avatarURL.isEmpty {
+        try await downloadImage(path: avatarURL)
+      }
+
+    } catch {
+      debugPrint(error)
+    }
+  }
+
+  func updateProfileButtonTapped() {
+    Task {
+      isLoading = true
+      defer { isLoading = false }
+      do {
+        let imageURL = try await uploadImage()
+
+        let currentUser = try await supabase.auth.session.user
+
+        let updatedProfile = Profile(
+          username: username,
+          fullName: fullName,
+          website: website,
+          avatarURL: imageURL
+        )
+
+        try await supabase
+          .from("profiles")
+          .update(updatedProfile)
+          .eq("id", value: currentUser.id)
+          .execute()
+      } catch {
+        debugPrint(error)
+      }
+    }
+  }
+
+  private func loadTransferable(from imageSelection: PhotosPickerItem) {
+    Task {
+      do {
+        avatarImage = try await imageSelection.loadTransferable(type: AvatarImage.self)
+      } catch {
+        debugPrint(error)
+      }
+    }
+  }
+
+  private func downloadImage(path: String) async throws {
+    let data = try await supabase.storage.from("avatars").download(path: path)
+    avatarImage = AvatarImage(data: data)
+  }
+
+  private func uploadImage() async throws -> String? {
+    guard let data = avatarImage?.data else { return nil }
+
+    let filePath = "\(UUID().uuidString).jpeg"
+
+    try await supabase.storage
+      .from("avatars")
+      .upload(
+        filePath,
+        data: data,
+        options: FileOptions(contentType: "image/jpeg")
+      )
+
+    return filePath
+  }
+}
+```
+
+----------------------------------------
+
+TITLE: Combining Data Fetching and Mutations with Next.js Server Actions
+DESCRIPTION: Example showing how to use both data fetching and mutations within the same Next.js component using Supabase. This demonstrates fetching data with Server Components and adding server-side mutation logic using Server Actions.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/www/_blog/2023-11-01-supabase-is-now-compatible-with-nextjs-14.mdx#2025-04-21_snippet_2
+
+LANGUAGE: tsx
+CODE:
+```
+export default async function Page() {
+  const { data } = await supabase.from('...').select()
+
+  const createNote = async () => {
+    'use server'
+    await supabase.from('...').insert({...})
+  }
+
+  return ...
+}
+```
+
+----------------------------------------
+
+TITLE: Supabase Login and Signup Actions Server-Side
+DESCRIPTION: This snippet contains server-side logic for login and signup actions using Supabase in a Next.js environment. It depends on 'next/cache', 'next/navigation', and '@/utils/supabase/server'. It accepts form data and attempts user authentication or registration with Supabase, redirecting on success or failure.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/auth/server-side/nextjs.mdx#2025-04-21_snippet_7
+
+LANGUAGE: typescript
+CODE:
+```
+'use server'
+
+import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
+
+import { createClient } from '@/utils/supabase/server'
+
+export async function login(formData: FormData) {
+  const supabase = await createClient()
+
+  // type-casting here for convenience
+  // in practice, you should validate your inputs
+  const data = {
+    email: formData.get('email') as string,
+    password: formData.get('password') as string,
+  }
+
+  const { error } = await supabase.auth.signInWithPassword(data)
+
+  if (error) {
+    redirect('/error')
+  }
+
+  revalidatePath('/', 'layout')
+  redirect('/')
+}
+
+export async function signup(formData: FormData) {
+  const supabase = await createClient()
+
+  // type-casting here for convenience
+  // in practice, you should validate your inputs
+  const data = {
+    email: formData.get('email') as string,
+    password: formData.get('password') as string,
+  }
+
+  const { error } = await supabase.auth.signUp(data)
+
+  if (error) {
+    redirect('/error')
+  }
+
+  revalidatePath('/', 'layout')
+  redirect('/')
+}
+```
+
+----------------------------------------
+
+TITLE: Creating Database Schema for User Profiles in Supabase
+DESCRIPTION: SQL script to set up the complete backend structure for user profiles in Supabase, including table creation, row-level security policies, realtime publication setup, and storage bucket configuration for avatar images.
+SOURCE: https://github.com/supabase/supabase/blob/master/examples/user-management/vue3-user-management/README.md#2025-04-21_snippet_1
+
+LANGUAGE: sql
+CODE:
+```
+-- Create a table for public "profiles"
+create table profiles (
+  id uuid references auth.users not null,
+  updated_at timestamp with time zone,
+  username text unique,
+  avatar_url text,
+  website text,
+
+  primary key (id),
+  unique(username),
+  constraint username_length check (char_length(username) >= 3)
+);
+
+alter table profiles enable row level security;
+
+create policy "Public profiles are viewable by everyone."
+  on profiles for select
+  using ( true );
+
+create policy "Users can insert their own profile."
+  on profiles for insert
+  with check ( (select auth.uid()) = id );
+
+create policy "Users can update own profile."
+  on profiles for update
+  using ( (select auth.uid()) = id );
+
+-- Set up Realtime!
+begin;
+  drop publication if exists supabase_realtime;
+  create publication supabase_realtime;
+commit;
+alter publication supabase_realtime add table profiles;
+
+-- Set up Storage!
+insert into storage.buckets (id, name)
+values ('avatars', 'avatars');
+
+create policy "Avatar images are publicly accessible."
+  on storage.objects for select
+  using ( bucket_id = 'avatars' );
+
+create policy "Anyone can upload an avatar."
+  on storage.objects for insert
+  with check ( bucket_id = 'avatars' );
+```
+
+----------------------------------------
+
+TITLE: Querying User Data with RLS Policy in JavaScript
+DESCRIPTION: Example showing simplified user data query after implementing Row Level Security policy. The database policy handles the filtering automatically based on the authenticated user.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/www/_blog/2020-08-05-supabase-auth.mdx#2025-04-21_snippet_1
+
+LANGUAGE: javascript
+CODE:
+```
+let user = await supabase.from('users').select('user_id, name')
+// Still returns { id: 'd0714948', name: 'Jane' }
+```
+
+----------------------------------------
+
+TITLE: Accessing User Information in a Secure Next.js Page
+DESCRIPTION: This snippet defines an async server-side component in Next.js that retrieves user information securely using Supabase. It requires users to be authenticated to access the page. Dependencies include 'next/navigation' and '@/utils/supabase/server'. Redirects unauthorized users to '/login'.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/auth/server-side/nextjs.mdx#2025-04-21_snippet_10
+
+LANGUAGE: typescript
+CODE:
+```
+import { redirect } from 'next/navigation'
+
+import { createClient } from '@/utils/supabase/server'
+
+export default async function PrivatePage() {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase.auth.getUser()
+  if (error || !data?.user) {
+    redirect('/login')
+  }
+
+  return <p>Hello {data.user.email}</p>
+}
+```
+
+----------------------------------------
+
+TITLE: Implementing Account Page with Avatar Upload in Vue.js for Supabase
+DESCRIPTION: This Vue.js component creates an Account page with profile management features. It includes functionality for loading user data, updating profiles, uploading avatars, and signing out. The component interacts with Supabase for data storage and authentication.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/getting-started/tutorials/with-nuxt-3.mdx#2025-04-21_snippet_7
+
+LANGUAGE: vue
+CODE:
+```
+<script setup>
+const supabase = useSupabaseClient()
+
+const loading = ref(true)
+const username = ref('')
+const website = ref('')
+const avatar_path = ref('')
+
+loading.value = true
+const user = useSupabaseUser()
+
+const { data } = await supabase
+  .from('profiles')
+  .select(`username, website, avatar_url`)
+  .eq('id', user.value.id)
+  .single()
+
+if (data) {
+  username.value = data.username
+  website.value = data.website
+  avatar_path.value = data.avatar_url
+}
+
+loading.value = false
+
+async function updateProfile() {
+  try {
+    loading.value = true
+    const user = useSupabaseUser()
+
+    const updates = {
+      id: user.value.id,
+      username: username.value,
+      website: website.value,
+      avatar_url: avatar_path.value,
+      updated_at: new Date(),
+    }
+
+    const { error } = await supabase.from('profiles').upsert(updates, {
+      returning: 'minimal', // Don't return the value after inserting
+    })
+
+    if (error) throw error
+  } catch (error) {
+    alert(error.message)
+  } finally {
+    loading.value = false
+  }
+}
+
+async function signOut() {
+  try {
+    loading.value = true
+    const { error } = await supabase.auth.signOut()
+    if (error) throw error
+  } catch (error) {
+    alert(error.message)
+  } finally {
+    loading.value = false
+  }
+}
+</script>
+
+<template>
+  <form class="form-widget" @submit.prevent="updateProfile">
+    <Avatar v-model:path="avatar_path" @upload="updateProfile" />
+    <div>
+      <label for="email">Email</label>
+      <input id="email" type="text" :value="user.email" disabled />
+    </div>
+    <div>
+      <label for="username">Name</label>
+      <input id="username" type="text" v-model="username" />
+    </div>
+    <div>
+      <label for="website">Website</label>
+      <input id="website" type="url" v-model="website" />
+    </div>
+
+    <div>
+      <input
+        type="submit"
+        class="button primary block"
+        :value="loading ? 'Loading ...' : 'Update'"
+        :disabled="loading"
+      />
+    </div>
+
+    <div>
+      <button class="button block" @click="signOut" :disabled="loading">Sign Out</button>
+    </div>
+  </form>
+</template>
+```
+
+----------------------------------------
+
+TITLE: Starting Supabase Stack
+DESCRIPTION: Command to start the local Supabase stack
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/ai/examples/image-search-openai-clip.mdx#2025-04-21_snippet_3
+
+LANGUAGE: shell
+CODE:
+```
+supabase start
+```
+
+----------------------------------------
+
+TITLE: Implementing Account Form Component in Next.js with Supabase
+DESCRIPTION: A React component for managing user profile data using Supabase. It retrieves profile information from the 'profiles' table and allows users to update their full name, username, website, and avatar URL. The component also includes form validation and error handling.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/getting-started/tutorials/with-nextjs.mdx#2025-04-21_snippet_13
+
+LANGUAGE: jsx
+CODE:
+```
+'use client'
+import { useCallback, useEffect, useState } from 'react'
+import { createClient } from '@/utils/supabase/client'
+
+export default function AccountForm({ user }) {
+  const supabase = createClient()
+  const [loading, setLoading] = useState(true)
+  const [fullname, setFullname] = useState(null)
+  const [username, setUsername] = useState(null)
+  const [website, setWebsite] = useState(null)
+  const [avatar_url, setAvatarUrl] = useState(null)
+
+  const getProfile = useCallback(async () => {
+    try {
+      setLoading(true)
+
+      const { data, error, status } = await supabase
+        .from('profiles')
+        .select(`full_name, username, website, avatar_url`)
+        .eq('id', user?.id)
+        .single()
+
+      if (error && status !== 406) {
+        throw error
+      }
+
+      if (data) {
+        setFullname(data.full_name)
+        setUsername(data.username)
+        setWebsite(data.website)
+        setAvatarUrl(data.avatar_url)
+      }
+    } catch (error) {
+      alert('Error loading user data!')
+    } finally {
+      setLoading(false)
+    }
+  }, [user, supabase])
+
+  useEffect(() => {
+    getProfile()
+  }, [user, getProfile])
+
+  async function updateProfile({ username, website, avatar_url }) {
+    try {
+      setLoading(true)
+
+      const { error } = await supabase.from('profiles').upsert({
+        id: user?.id,
+        full_name: fullname,
+        username,
+        website,
+        avatar_url,
+        updated_at: new Date().toISOString(),
+      })
+      if (error) throw error
+      alert('Profile updated!')
+    } catch (error) {
+      alert('Error updating the data!')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="form-widget">
+      <div>
+        <label htmlFor="email">Email</label>
+        <input id="email" type="text" value={user?.email} disabled />
+      </div>
+      <div>
+        <label htmlFor="fullName">Full Name</label>
+        <input
+          id="fullName"
+          type="text"
+          value={fullname || ''}
+          onChange={(e) => setFullname(e.target.value)}
+        />
+      </div>
+      <div>
+        <label htmlFor="username">Username</label>
+        <input
+          id="username"
+          type="text"
+          value={username || ''}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+      </div>
+      <div>
+        <label htmlFor="website">Website</label>
+        <input
+          id="website"
+          type="url"
+          value={website || ''}
+          onChange={(e) => setWebsite(e.target.value)}
+        />
+      </div>
+
+      <div>
+        <button
+          className="button primary block"
+          onClick={() => updateProfile({ fullname, username, website, avatar_url })}
+          disabled={loading}
+        >
+          {loading ? 'Loading ...' : 'Update'}
+        </button>
+      </div>
+
+      <div>
+        <form action="/auth/signout" method="post">
+          <button className="button block" type="submit">
+            Sign out
+          </button>
+        </form>
+      </div>
+    </div>
+  )
+}
+```
+
+----------------------------------------
+
+TITLE: Creating Supabase Client for getServerSideProps in Next.js
+DESCRIPTION: Utility function to create a Supabase client for use in getServerSideProps, handling server-side cookie management.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/auth/server-side/nextjs.mdx#2025-04-21_snippet_13
+
+LANGUAGE: typescript
+CODE:
+```
+import { type GetServerSidePropsContext } from 'next'
+import { createServerClient, serializeCookieHeader } from '@supabase/ssr'
+
+export function createClient({ req, res }: GetServerSidePropsContext) {
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return Object.keys(req.cookies).map((name) => ({ name, value: req.cookies[name] || '' }))
+        },
+        setAll(cookiesToSet) {
+          res.setHeader(
+            'Set-Cookie',
+            cookiesToSet.map(({ name, value, options }) =>
+              serializeCookieHeader(name, value, options)
+            )
+          )
+        },
+      },
+    }
+  )
+
+  return supabase
+}
+```
+
+----------------------------------------
+
+TITLE: Creating Embeddings Table with pgvector Extension in SQL
+DESCRIPTION: SQL migration that creates a vector extension, defines an embeddings table with a vector column, enables row level security, and adds an HNSW index for efficient vector similarity searches.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/functions/examples/semantic-search.mdx#2025-04-21_snippet_0
+
+LANGUAGE: sql
+CODE:
+```
+create extension if not exists vector with schema extensions;
+
+create table embeddings (
+  id bigint primary key generated always as identity,
+  content text not null,
+  embedding vector (384)
+);
+alter table embeddings enable row level security;
+
+create index on embeddings using hnsw (embedding vector_ip_ops);
+```
+
+----------------------------------------
+
+TITLE: Using Common Table Expressions (CTE)
+DESCRIPTION: Demonstrates how to use CTEs to create temporary result sets for more readable and maintainable queries.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/www/_blog/2021-02-27-cracking-postgres-interview.mdx#2025-04-21_snippet_6
+
+LANGUAGE: sql
+CODE:
+```
+with ten_strumpers as (
+  select id, first_name
+  from students
+  where surname = 'Strumper'
+  order by first_name
+  limit 10
+)
+select id
+from ten_strumpers
+where first_name like "S%";
+```
+
+----------------------------------------
+
+TITLE: Setting Up Supabase Environment Variables
+DESCRIPTION: Configuration of environment variables in .env.local file to connect the Next.js application to Supabase by setting the Supabase URL and anonymous key.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/getting-started/quickstarts/nextjs.mdx#2025-04-21_snippet_1
+
+LANGUAGE: text
+CODE:
+```
+NEXT_PUBLIC_SUPABASE_URL=<SUBSTITUTE_SUPABASE_URL>
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<SUBSTITUTE_SUPABASE_ANON_KEY>
+```
+
+----------------------------------------
+
+TITLE: Setting Up Public Profiles Table with RLS
+DESCRIPTION: Complete example of creating a profiles table with RLS and a public access policy.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/database/postgres/row-level-security.mdx#2025-04-21_snippet_2
+
+LANGUAGE: sql
+CODE:
+```
+-- 1. Create table
+create table profiles (
+  id uuid primary key,
+  user_id references auth.users,
+  avatar_url text
+);
+
+-- 2. Enable RLS
+alter table profiles enable row level security;
+
+-- 3. Create Policy
+create policy "Public profiles are visible to everyone."
+on profiles for select
+to anon         -- the Postgres Role (recommended)
+using ( true ); -- the actual Policy
+```
+
+----------------------------------------
+
+TITLE: Initializing Supabase Client in TypeScript
+DESCRIPTION: Create a Supabase client instance using the environment variables in a utils file.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/www/_blog/2024-09-23-local-first-expo-legend-state.mdx#2025-04-21_snippet_3
+
+LANGUAGE: typescript
+CODE:
+```
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(
+  process.env.EXPO_PUBLIC_SUPABASE_URL,
+  process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY
+)
+```
+
+----------------------------------------
+
+TITLE: Implementing Sign-Out Route Handler in Next.js
+DESCRIPTION: A Next.js API route handler that handles user sign-out. It first verifies if a user is logged in, performs the sign-out operation using Supabase, and then redirects to the login page. It also revalidates the page layout for updated UI.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/getting-started/tutorials/with-nextjs.mdx#2025-04-21_snippet_15
+
+LANGUAGE: js
+CODE:
+```
+import { createClient } from '@/utils/supabase/server'
+import { revalidatePath } from 'next/cache'
+import { NextResponse } from 'next/server'
+
+export async function POST(req) {
+  const supabase = await createClient()
+
+  // Check if a user's logged in
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (user) {
+    await supabase.auth.signOut()
+  }
+
+  revalidatePath('/', 'layout')
+  return NextResponse.redirect(new URL('/login', req.url), {
+    status: 302,
+  })
+}
+```
+
+----------------------------------------
+
+TITLE: Creating Supabase Server Client for Next.js Server Components
+DESCRIPTION: Defines a utility function that creates a Supabase client for use in Server Components, Server Actions, and Route Handlers. Configures cookie handling to manage authentication state on the server.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/auth/server-side/nextjs.mdx#2025-04-21_snippet_3
+
+LANGUAGE: ts
+CODE:
+```
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
+
+export async function createClient() {
+  const cookieStore = await cookies()
+
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll()
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            )
+          } catch {
+            // The `setAll` method was called from a Server Component.
+            // This can be ignored if you have middleware refreshing
+            // user sessions.
+          }
+        },
+      },
+    }
+  )
+}
+```
+
+----------------------------------------
+
+TITLE: Signing Out a User JavaScript
+DESCRIPTION: The JavaScript snippet demonstrates how to sign out a user using the Supabase client library. It shows the basic sign-out method and how to invoke it from the client-side, effectively ending the active session. Requires '@supabase/supabase-js' package.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/auth/signout.mdx#2025-04-21_snippet_0
+
+LANGUAGE: JavaScript
+CODE:
+```
+import { createClient } from '@supabase/supabase-js'\nconst supabase = createClient('https://your-project-id.supabase.co', 'your-anon-key')\n\n// ---cut---\nasync function signOut() {\n  const { error } = await supabase.auth.signOut()\n}
+```
+
+----------------------------------------
+
+TITLE: Creating a Supabase client with service_role secret for server-side use in TypeScript
+DESCRIPTION: This code snippet demonstrates how to create a separate Supabase client using the createClient method from @supabase/supabase-js, providing it with the service_role secret. It also disables certain auth properties to ensure proper functionality in a server environment.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/troubleshooting/performing-administration-tasks-on-the-server-side-with-the-servicerole-secret-BYM4Fa.mdx#2025-04-21_snippet_0
+
+LANGUAGE: typescript
+CODE:
+```
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(supabaseUrl, serviceRoleSecret, {
+  auth: {
+    persistSession: false,
+    autoRefreshToken: false,
+    detectSessionInUrl: false,
+  },
+})
+```
+
+----------------------------------------
+
+TITLE: Installing Supabase JavaScript Client
+DESCRIPTION: Command to install the Supabase JavaScript client library for integrating with Supabase services.
+SOURCE: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/getting-started/tutorials/with-nextjs.mdx#2025-04-21_snippet_2
+
+LANGUAGE: bash
+CODE:
+```
+npm install @supabase/supabase-js
+```

@@ -1,0 +1,247 @@
+LIST OF DOCUMENTS AND SERVICES PROVIDED BY A CHARTERED ACCOUNTANT
+
+1. INCOME TAX PORTAL REGISTRATION
+
+A. FOR INDIVIDUALS
+- PAN Card (Mandatory)
+- Aadhaar Card (Linked with PAN)
+- Mobile Number (Registered with Aadhaar for OTP verification)
+- Email ID (For communication and OTP)
+- Bank Account Details (Account number, IFSC, and bank name for refunds)
+- Address Proof (Aadhaar, Passport, Voter ID, or Utility Bill)
+
+B. FOR BUSINESS PROFESSIONALS
+- PAN Card of Business / Proprietor / Partner / Director
+- Aadhaar Card of Proprietor / Partner / Director
+- Mobile Number & Email ID (For OTP verification)
+- Business Name & Address Proof (Electricity Bill, Rental Agreement, etc.)
+- Partnership Deed (for Partnership Firms) / LLP Agreement (for LLPs)
+- MOA & AOA (For Private Limited / Public Limited Companies)
+- CIN (Corporate Identification Number) for Companies
+- GST Registration Certificate (If applicable)
+- Digital Signature Certificate (DSC) (If required for companies and firms)
+
+C. FOR HUF (HINDU UNDIVIDED FAMILY)
+- PAN Card of HUF
+- PAN & Aadhaar of Karta (Head of HUF)
+- Deed of HUF Creation
+- Bank Account Details of HUF
+
+D. FOR TRUSTS/SOCIETIES/NGOs
+- PAN Card of Trust / Society / NGO
+- Trust Deed / Registration Certificate
+- Details of Trustees / Members (PAN, Aadhaar, Address Proof)
+- Email ID & Mobile Number of Authorized Signatory
+
+2. PAN CARD APPLICATION
+
+A. FOR INDIVIDUALS (INDIAN CITIZENS)
+Proof of Identity (Any one):
+- Aadhaar Card
+- Voter ID
+- Passport
+- Driving License
+- Ration Card with photo
+- Arm's License
+- Photo ID issued by Government Authority
+
+Proof of Address (Any one):
+- Aadhaar Card
+- Voter ID
+- Passport
+- Driving License
+- Electricity/Water Bill (Not older than 3 months)
+- Bank Account Statement (Not older than 3 months)
+- Landline Telephone Bill (Not older than 3 months)
+- Employer Certificate
+
+Proof of Date of Birth (Any one):
+- Birth Certificate
+- Matriculation Certificate
+- Aadhaar Card
+- Passport
+- Driving License
+
+Additional Documents for Foreign Citizens:
+- Passport
+- OCI/PIO Card
+- Visa Copy (if residing in India)
+
+B. FOR BUSINESS ENTITIES
+For Companies (Indian & Foreign):
+- Certificate of Incorporation (Issued by MCA)
+- Copy of PAN of Directors (for Indian companies)
+
+For Partnership Firms:
+- Partnership Deed
+- Registration Certificate (if registered)
+- PAN of Partners
+
+For Limited Liability Partnerships (LLP):
+- LLP Agreement
+- Certificate of Incorporation (Issued by MCA)
+- PAN of Partners
+
+For Trusts & NGOs:
+- Trust Deed / Registration Certificate
+- PAN of Trustees
+
+For Hindu Undivided Family (HUF):
+- HUF Deed (if available)
+- PAN of Karta
+- Aadhaar of Karta
+
+3. TAN REGISTRATION
+- PAN Card of the Applicant / Business
+- Proof of Identity (Aadhaar Card, Passport, Voter ID, etc.)
+- Proof of Address (Electricity Bill, Bank Statement, Rental Agreement, etc.)
+- Business/Entity Name & Type
+- Office Address & Contact Details
+- Existing TAN (if applicable)
+
+4. ITR FILING
+
+A. FOR SALARIED PERSONS
+
+Basic Documents:
+- PAN Card
+- Aadhaar Card
+- Bank Account Details
+
+Income Proof:
+- Form 16
+- Salary Slips
+- Interest Income Certificates
+- Rental Income Details (if applicable)
+
+Tax Deduction Proofs:
+- Form 26AS
+- AIS and TIS
+- Investment Proofs (80C, 80D, 80E, etc.)
+- Home Loan Interest Certificate
+- Medical Insurance Premium Receipts
+- Education Loan Interest Certificate
+- Donations Receipts
+
+Capital Gains Documents (If Applicable):
+- Sale/Purchase Deed of Property
+- Stock Market Trading Statement
+
+Other Documents:
+- Rental Agreement & Rent Receipts (For HRA)
+- Foreign Income Details (If applicable)
+- Form 67 (For Foreign Tax Credit)
+
+B. FOR BUSINESS PERSONS
+
+Basic Documents:
+- PAN Card
+- Aadhaar Card
+- Bank Account Details
+
+Business Documents:
+- Profit & Loss Account
+- Balance Sheet
+- GST Returns
+- TDS Certificates
+- Tax Audit Report (If applicable)
+- Business Expense Proofs
+- Purchase Bills & Invoices
+- Loan Statements
+- Depreciation Details
+
+Investment & Deduction Proofs:
+- Insurance Premium Receipts
+- PPF/EPF Contribution Proof
+- Health Insurance Premium Receipts
+- Donation Receipts
+
+Other Documents:
+- Partnership Deed / LLP Agreement
+- MOA & AOA (For companies)
+- Foreign Income & Assets Details
+
+5. GST REGISTRATION
+
+A. FOR PROPRIETORSHIP
+- PAN Card of Proprietor
+- Aadhaar Card of Proprietor
+- Passport-sized Photograph
+- Bank Account Details
+- Business Address Proof
+
+B. FOR PARTNERSHIP FIRM
+- PAN Card of Partnership Firm
+- Partnership Deed
+- PAN & Aadhaar of Partners
+- Photographs of Partners
+- Bank Account Details
+- Business Address Proof
+
+C. FOR PRIVATE COMPANY & LLP
+- PAN Card of Company/LLP
+- Certificate of Incorporation
+- MOA & AOA
+- Board Resolution
+- PAN & Aadhaar of Directors/Partners
+- Photographs of Directors/Partners
+- Bank Account Details
+- Business Address Proof
+
+D. FOR HUF
+- PAN Card of HUF
+- PAN & Aadhaar of Karta
+- Bank Account Details
+- Business Address Proof
+
+Additional Documents:
+- Digital Signature Certificate (For Companies & LLPs)
+- Letter of Authorization / Board Resolution
+- GST Declaration Form
+
+6. GST RETURNS FILING TYPES & DUE DATES
+
+Regular Taxpayers:
+- GSTR-1: 11th of next month (monthly) / 13th of next month (quarterly)
+- GSTR-3B: 20th of next month
+- GSTR-9: 31st December of next financial year
+- GSTR-9C: 31st December of next financial year
+
+Composition Scheme Taxpayers:
+- GSTR-4: 30th April of next financial year
+- CMP-08: 18th of next quarter
+
+E-Commerce & TDS/TCS:
+- GSTR-8: 10th of next month
+- GSTR-7: 10th of next month
+
+Other Returns:
+- GSTR-5: 20th of next month
+- GSTR-5A: 20th of next month
+- GSTR-6: 13th of next month
+- GSTR-10: Within 3 months of cancellation
+- GSTR-11: 28th of next month
+
+7. SHOP ACT REGISTRATION
+General Documents:
+- PAN Card of Business Owner
+- Aadhaar Card/Voter ID/Passport
+- Photographs
+- Mobile Number & Email ID
+
+Business-Specific Documents:
+- Partnership Deed/Certificate of Incorporation
+- Business Address Proof
+- NOC from Property Owner
+- Employee Details
+- Additional Licenses (if applicable)
+
+8. UDYAM REGISTRATION
+Basic Information:
+- Aadhaar Card of Business Owner
+- PAN Card
+- GST Registration (if applicable)
+- Bank Account Details
+- Business Activity Details
+- Investment Details
+- Turnover Information

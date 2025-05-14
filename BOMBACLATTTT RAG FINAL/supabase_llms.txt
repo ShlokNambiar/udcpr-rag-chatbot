@@ -1,0 +1,1068 @@
+TITLE: Uploading a File to Storage
+DESCRIPTION: This code uploads a file object (obtained from 'getUserFile') to the 'photos' bucket with a new pathname. It facilitates file storage via the Supabase storage client.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/README.md#_snippet_16
+
+LANGUAGE: python
+CODE:
+```
+bucket_name: str = "photos"
+new_file = getUserFile()
+
+data = supabase.storage.from_(bucket_name).upload("/user1/profile.png", new_file)
+```
+
+----------------------------------------
+
+TITLE: Initializing Supabase Client in Python
+DESCRIPTION: This code initializes the Supabase client by retrieving connection URL and API key from environment variables and creating a client instance. It prepares the application to perform database and storage operations.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/README.md#_snippet_6
+
+LANGUAGE: python
+CODE:
+```
+import os
+from supabase import create_client, Client
+
+url: str = os.environ.get("SUPABASE_URL")
+key: str = os.environ.get("SUPABASE_KEY")
+supabase: Client = create_client(url, key)
+```
+
+----------------------------------------
+
+TITLE: User Sign-up with Email and Password
+DESCRIPTION: This snippet uses the Supabase auth client to register a new user with email and password. It returns the user object upon successful registration, enabling email-based authentication flows.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/README.md#_snippet_7
+
+LANGUAGE: python
+CODE:
+```
+user = supabase.auth.sign_up({ "email": users_email, "password": users_password })
+```
+
+----------------------------------------
+
+TITLE: Updating Records in a Table
+DESCRIPTION: This snippet updates the 'countries' table, setting 'country' to 'Indonesia' and 'capital_city' to 'Jakarta' for records with 'id' equal to 1. It performs an update operation with specified conditions.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/README.md#_snippet_11
+
+LANGUAGE: python
+CODE:
+```
+data = supabase.table("countries").update({"country": "Indonesia", "capital_city": "Jakarta"}).eq("id", 1).execute()
+```
+
+----------------------------------------
+
+TITLE: Deleting Records from a Table
+DESCRIPTION: This snippet deletes records from the 'countries' table where 'id' equals 1 and executes the delete operation, which removes matching entries from the database.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/README.md#_snippet_13
+
+LANGUAGE: python
+CODE:
+```
+data = supabase.table("countries").delete().eq("id", 1).execute()
+```
+
+----------------------------------------
+
+TITLE: Calling an Edge Function
+DESCRIPTION: This function invokes a Supabase edge function named 'hello-world' with an empty body. It includes basic error handling for specific exceptions and outputs error messages if caught.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/README.md#_snippet_14
+
+LANGUAGE: python
+CODE:
+```
+def test_func():
+  try:
+    resp = supabase.functions.invoke("hello-world", invoke_options={'body':{}})
+    return resp
+  except (FunctionsRelayError, FunctionsHttpError) as exception:
+    err = exception.to_dict()
+    print(err.get("message"))
+```
+
+----------------------------------------
+
+TITLE: Selecting Data with Conditions
+DESCRIPTION: This code retrieves records from the 'countries' table where the 'country' field equals 'IL'. It executes the query and asserts that data was retrieved successfully.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/README.md#_snippet_10
+
+LANGUAGE: python
+CODE:
+```
+data = supabase.table("countries").select("*").eq("country", "IL").execute()
+
+# Assert we pulled real data.
+assert len(data.data) > 0
+```
+
+----------------------------------------
+
+TITLE: Creating and Activating a Conda Environment
+DESCRIPTION: This snippet creates a new Conda environment named 'supabase-py' and activates it, managing dependencies separately from system packages. Useful for clean Python setups.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/README.md#_snippet_2
+
+LANGUAGE: bash
+CODE:
+```
+conda create --name supabase-py
+conda activate supabase-py
+```
+
+----------------------------------------
+
+TITLE: Listing Files in a Storage Bucket
+DESCRIPTION: This code lists all files stored in the 'charts' storage bucket, returning a list of file objects or filenames, useful for managing or browsing stored files.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/README.md#_snippet_18
+
+LANGUAGE: python
+CODE:
+```
+bucket_name: str = "charts"
+
+data = supabase.storage.from_(bucket_name).list()
+```
+
+----------------------------------------
+
+TITLE: User Sign-in with Email and Password
+DESCRIPTION: This code performs user authentication by signing in with email and password credentials, returning a user object if successful. It's used for standard login workflows.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/README.md#_snippet_8
+
+LANGUAGE: python
+CODE:
+```
+user = supabase.auth.sign_in_with_password({ "email": users_email, "password": users_password })
+```
+
+----------------------------------------
+
+TITLE: Moving and Renaming Files in Storage
+DESCRIPTION: This snippet moves a file from one path to another within the 'charts' bucket, effectively renaming or relocating it. It facilitates file organization in storage.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/README.md#_snippet_19
+
+LANGUAGE: python
+CODE:
+```
+bucket_name: str = "charts"
+old_file_path: str = "generic/graph1.png"
+new_file_path: str = "important/revenue.png"
+
+data = supabase.storage.from_(bucket_name).move(old_file_path, new_file_path)
+```
+
+----------------------------------------
+
+TITLE: Setting Supabase Environment Variables
+DESCRIPTION: This snippet exports the required environment variables 'SUPABASE_URL' and 'SUPABASE_KEY' in the shell, which are used to configure the client connection to the Supabase backend.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/README.md#_snippet_5
+
+LANGUAGE: bash
+CODE:
+```
+export SUPABASE_URL="my-url-to-my-awesome-supabase-instance"
+export SUPABASE_KEY="my-supa-dupa-secret-supabase-api-key"
+```
+
+----------------------------------------
+
+TITLE: Creating and Activating a Virtual Environment with venv
+DESCRIPTION: This code creates a Python virtual environment named 'env' using the built-in venv module and activates it, ensuring an isolated environment for package management. It supports cross-platform activation commands.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/README.md#_snippet_1
+
+LANGUAGE: bash
+CODE:
+```
+python3 -m venv env
+source env/bin/activate  # On Windows, use .\env\Scripts\activate
+```
+
+----------------------------------------
+
+TITLE: Installing supabase Package via pip
+DESCRIPTION: This command installs the official supabase Python client library compatible with Python 3.9 or higher using pip, enabling access to Supabase's features from Python.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/README.md#_snippet_3
+
+LANGUAGE: bash
+CODE:
+```
+# with pip
+pip install supabase
+```
+
+----------------------------------------
+
+TITLE: Cloning the supabase-py Repository from GitHub
+DESCRIPTION: This snippet clones the official supabase-py GitHub repository to the local environment and navigates into the cloned directory. It sets up the groundwork for developing or customizing the library locally.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/README.md#_snippet_0
+
+LANGUAGE: bash
+CODE:
+```
+git clone https://github.com/supabase/supabase-py.git
+cd supabase-py
+```
+
+----------------------------------------
+
+TITLE: Upserting Data with Duplicate Keys
+DESCRIPTION: This code upserts a record into the 'countries' table, inserting or updating 'country' and 'capital_city'. It verifies the operation by asserting non-empty result data.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/README.md#_snippet_12
+
+LANGUAGE: python
+CODE:
+```
+country = {
+  "country": "United Kingdom",
+  "capital_city": "London" # This was missing when it was added
+}
+
+data = supabase.table("countries").upsert(country).execute()
+assert len(data.data) > 0
+```
+
+----------------------------------------
+
+TITLE: Removing Files from Storage
+DESCRIPTION: This snippet deletes specified files from the 'photos' bucket by their filenames. It demonstrates file removal within storage buckets.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/README.md#_snippet_17
+
+LANGUAGE: python
+CODE:
+```
+bucket_name: str = "photos"
+
+data = supabase.storage.from_(bucket_name).remove(["old_photo.png", "image5.jpg"])
+```
+
+----------------------------------------
+
+TITLE: Inserting Data into a Database Table
+DESCRIPTION: This snippet inserts a record into the 'countries' table with the name 'Germany' and executes the query. It verifies the insertion by asserting the returned data contains entries.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/README.md#_snippet_9
+
+LANGUAGE: python
+CODE:
+```
+data = supabase.table("countries").insert({"name":"Germany"}).execute()
+
+# Assert we pulled real data.
+assert len(data.data) > 0
+```
+
+----------------------------------------
+
+TITLE: Downloading a File from Storage
+DESCRIPTION: This snippet downloads a file named 'photo1.png' from the 'photos' storage bucket using the storage client. It retrieves binary data suitable for file rendering or save operations.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/README.md#_snippet_15
+
+LANGUAGE: python
+CODE:
+```
+bucket_name: str = "photos"
+
+data = supabase.storage.from_(bucket_name).download("photo1.png")
+```
+
+----------------------------------------
+
+TITLE: Exporting APIResponse and APIError in Python
+DESCRIPTION: This snippet likely involves updating the `__init__.py` file to export the `APIResponse` and `APIError` classes from the `postgrest-py` library.  This allows users to directly access these classes from the main supabase-py package, providing more convenient access to the underlying API response structures. The `isort` tool is used to ensure consistent import sorting.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_57
+
+LANGUAGE: Python
+CODE:
+```
+* feat: export APIResponse and APIError from postgrest-py (#152)
+
+* Update __init__.py
+
+* Apply isort
+```
+
+----------------------------------------
+
+TITLE: feat: add schema method to the client
+DESCRIPTION: This commit adds a new `schema` method to the Supabase client. This method presumably allows interacting with database schemas.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_32
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Dependency Management: Bumping httpx from 0.21.1 to 0.21.3
+DESCRIPTION: This snippet captures the process of updating the httpx library dependency to ensure compatibility and fix bugs. It includes the release notes, changelog, and the purpose of dependency upgrades, integral for maintaining secure and efficient HTTP client operations within the project.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_58
+
+LANGUAGE: Python
+CODE:
+```
+build(deps): bump httpx from 0.21.1 to 0.21.3 ([`1f1c713`](https://github.com/supabase-community/supabase-py/commit/1f1c713d86b086cf8d2f97deadd6b5f4edee42ed))
+```
+
+----------------------------------------
+
+TITLE: Bumping Version to v2.4.6
+DESCRIPTION: This commit bumps the version of the supabase-py library to v2.4.6.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_33
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Dependency Management: Bumping httpx from 0.19.0 to 0.21.1
+DESCRIPTION: This code shows updating the httpx dependency to a newer version, including references to release notes and changelog for version tracking, which enhances network communication reliability in the SDK.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_59
+
+LANGUAGE: Python
+CODE:
+```
+build(deps): bump httpx from 0.19.0 to 0.21.1 ([`93c4a4e`](https://github.com/supabase-community/supabase-py/commit/93c4a4e617bc23abd234d5891f97edae63401961))
+```
+
+----------------------------------------
+
+TITLE: Version Bumping from 0.1.1 to 0.2.0
+DESCRIPTION: This code updates the project version, indicating a release with potential breaking changes and new features, serving as version control for release management.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_63
+
+LANGUAGE: Python
+CODE:
+```
+bump: version 0.1.1 -> 0.2.0 ([`7c7d50b`](https://github.com/supabase-community/supabase-py/commit/7c7d50b94a20fc3bd2bc2a579295035d0e5d07b6))
+```
+
+----------------------------------------
+
+TITLE: Updating postgrest Dependency Metadata (v0.12.0 to v0.13.0) (YAML)
+DESCRIPTION: YAML block generated by Dependabot specifying the update details for the 'postgrest' production dependency. It indicates that postgrest is a direct production dependency and the update type is a semantic version minor bump.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_44
+
+LANGUAGE: yaml
+CODE:
+```
+updated-dependencies:
+- dependency-name: postgrest
+  dependency-type: direct:production
+  update-type: version-update:semver-minor
+```
+
+----------------------------------------
+
+TITLE: Dependabot Configuration for Pytest Bump
+DESCRIPTION: This YAML snippet, extracted from a Dependabot commit message, details the update for the 'pytest' dependency. It identifies 'pytest' as a direct development dependency and specifies the update type as a minor semantic version update.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_56
+
+LANGUAGE: yaml
+CODE:
+```
+updated-dependencies:
+- dependency-name: pytest
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+```
+
+----------------------------------------
+
+TITLE: Updating python-semantic-release Dependency Metadata (YAML)
+DESCRIPTION: YAML block generated by Dependabot specifying the update details for the 'python-semantic-release' development dependency. It indicates that python-semantic-release is a direct development dependency and the update type is a semantic version minor bump.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_46
+
+LANGUAGE: yaml
+CODE:
+```
+updated-dependencies:
+- dependency-name: python-semantic-release
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+```
+
+----------------------------------------
+
+TITLE: Updating gotrue Dependency Metadata (YAML)
+DESCRIPTION: YAML block generated by Dependabot specifying the update details for the 'gotrue' production dependency. It indicates that gotrue is a direct production dependency and the update type is a semantic version minor bump.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_54
+
+LANGUAGE: yaml
+CODE:
+```
+updated-dependencies:
+- dependency-name: gotrue
+  dependency-type: direct:production
+  update-type: version-update:semver-minor
+```
+
+----------------------------------------
+
+TITLE: Updating pre-commit Dependency Metadata (YAML)
+DESCRIPTION: YAML block generated by Dependabot specifying the update details for the 'pre-commit' development dependency. It indicates that pre-commit is a direct development dependency and the update type is a semantic version minor bump.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_49
+
+LANGUAGE: yaml
+CODE:
+```
+updated-dependencies:
+- dependency-name: pre-commit
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+```
+
+----------------------------------------
+
+TITLE: Updating black Dependency Metadata (YAML)
+DESCRIPTION: YAML block generated by Dependabot specifying the update details for the 'black' development dependency. It indicates that black is a direct development dependency and the update type is a semantic version minor bump.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_45
+
+LANGUAGE: yaml
+CODE:
+```
+updated-dependencies:
+- dependency-name: black
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+```
+
+----------------------------------------
+
+TITLE: Updating pytest Dependency Metadata (YAML)
+DESCRIPTION: YAML block generated by Dependabot specifying the update details for the 'pytest' development dependency. It indicates that pytest is a direct development dependency and the update type is a semantic version patch.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_43
+
+LANGUAGE: yaml
+CODE:
+```
+updated-dependencies:
+- dependency-name: pytest
+  dependency-type: direct:development
+  update-type: version-update:semver-patch
+```
+
+----------------------------------------
+
+TITLE: Adding async support for storage buckets API
+DESCRIPTION: This feature enhances the storage API by enabling asynchronous operations, facilitating non-blocking calls for improved performance in concurrent environments.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_65
+
+LANGUAGE: Python
+CODE:
+```
+feat: add async support to storage buckets API ([`e0748a8`](https://github.com/supabase-community/supabase-py/commit/e0748a8700818c4c2caaa538d36006c7212dcb29))
+```
+
+----------------------------------------
+
+TITLE: Refactoring: Renaming module from realtime_py to realtime
+DESCRIPTION: This refactor renames the module for clarity and consistency, improving code organization and readability within the project structure.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_64
+
+LANGUAGE: Python
+CODE:
+```
+refactor: realtime_py -> realtime ([`4e8a5bc`](https://github.com/supabase-community/supabase-py/commit/4e8a5bc3f491e5a8ecbbc249c5f613099b56b4da))
+```
+
+----------------------------------------
+
+TITLE: Creating custom StorageException class
+DESCRIPTION: This feature introduces a custom exception class for storage-related errors, allowing more precise error handling and debugging specific to storage operations.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_66
+
+LANGUAGE: Python
+CODE:
+```
+feat: create custom StorageException ([`55e7eef`](https://github.com/supabase-community/supabase-py/commit/55e7eef29541c579599c325bc45026aac45f0ecc))
+```
+
+----------------------------------------
+
+TITLE: Updating urllib3 Indirect Dependency Metadata (v2.0.4 to v2.0.6) (YAML)
+DESCRIPTION: YAML block generated by Dependabot specifying the update details for the 'urllib3' indirect dependency (older update). It notes the dependency name and that it is an indirect dependency.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_51
+
+LANGUAGE: yaml
+CODE:
+```
+updated-dependencies:
+- dependency-name: urllib3
+  dependency-type: indirect
+```
+
+----------------------------------------
+
+TITLE: Updating commitizen Dependency Metadata (YAML)
+DESCRIPTION: YAML block generated by Dependabot specifying the update details for the 'commitizen' development dependency. It indicates that commitizen is a direct development dependency and the update type is a semantic version minor bump.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_47
+
+LANGUAGE: yaml
+CODE:
+```
+updated-dependencies:
+- dependency-name: commitizen
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+```
+
+----------------------------------------
+
+TITLE: Adding new dependency: requests-toolbelt
+DESCRIPTION: This code adds 'requests-toolbelt' to the project dependencies, supporting enhanced HTTP operations for multipart uploads or advanced client features, improving the SDK’s network capabilities.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_60
+
+LANGUAGE: Python
+CODE:
+```
+build: add requests-toolbelt to the dependencies list
+```
+
+----------------------------------------
+
+TITLE: Installing supabase Package using conda-forge
+DESCRIPTION: This command installs the supabase package from the conda-forge channel via conda, offering an alternative to pip for managing package dependencies in Conda environments.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/README.md#_snippet_4
+
+LANGUAGE: bash
+CODE:
+```
+conda install -c conda-forge supabase
+```
+
+----------------------------------------
+
+TITLE: Updating urllib3 Indirect Dependency Metadata (v2.0.6 to v2.0.7) (YAML)
+DESCRIPTION: YAML block generated by Dependabot specifying the update details for the 'urllib3' indirect dependency. It notes the dependency name and that it is an indirect dependency.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_48
+
+LANGUAGE: yaml
+CODE:
+```
+updated-dependencies:
+- dependency-name: urllib3
+  dependency-type: indirect
+```
+
+----------------------------------------
+
+TITLE: Bumping urllib3 dependency (dev)
+DESCRIPTION: This commit updates the `urllib3` dependency to a newer version in the pip group (dev). This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_17
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping zipp dependency
+DESCRIPTION: This commit updates the `zipp` dependency to a newer version in the pip group. This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_5
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping python-semantic-release dependency (dev)
+DESCRIPTION: This commit updates the `python-semantic-release` dependency to a newer version (dev). This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_7
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping python-semantic-release dependency (dev)
+DESCRIPTION: This commit updates the `python-semantic-release` dependency to a newer version (dev). This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_37
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping python-semantic-release dependency (dev)
+DESCRIPTION: This commit updates the `python-semantic-release` dependency to a newer version (dev). This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_10
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping python-semantic-release dependency (dev)
+DESCRIPTION: This commit updates the `python-semantic-release` dependency to a newer version (dev). This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_15
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping python-semantic-release dependency (dev)
+DESCRIPTION: This commit updates the `python-semantic-release` dependency to a newer version (dev). This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_24
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping requests dependency (dev)
+DESCRIPTION: This commit updates the `requests` dependency to a newer version (dev). This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_34
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping commitizen dependency (dev)
+DESCRIPTION: This commit updates the `commitizen` dependency to a newer version (dev). This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_29
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping pytest dependency (dev)
+DESCRIPTION: This commit updates the `pytest` dependency to a newer version (dev). This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_21
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping realtime dependency
+DESCRIPTION: This commit updates the `realtime` dependency to a newer version. This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_16
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping postgrest dependency
+DESCRIPTION: This commit updates the `postgrest` dependency to a newer version. This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_1
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping gotrue dependency
+DESCRIPTION: This commit updates the `gotrue` dependency to a newer version. This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_12
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping python-semantic-release dependency
+DESCRIPTION: This commit updates the `python-semantic-release` dependency to a newer version. This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_41
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping supafunc dependency
+DESCRIPTION: This commit updates the `supafunc` dependency to a newer version. This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_20
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping python-semantic-release dependency
+DESCRIPTION: This commit updates the `python-semantic-release` dependency to a newer version. This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_6
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping python-semantic-release dependency
+DESCRIPTION: This commit updates the `python-semantic-release` dependency to a newer version. This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_28
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping gotrue dependency
+DESCRIPTION: This commit updates the `gotrue` dependency to a newer version. This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_11
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping certifi dependency
+DESCRIPTION: This commit updates the `certifi` dependency to a newer version. This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_8
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping python-semantic-release dependency
+DESCRIPTION: This commit updates the `python-semantic-release` dependency to a newer version. This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_9
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping gotrue dependency
+DESCRIPTION: This commit updates the `gotrue` dependency to a newer version. This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_26
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping gotrue dependency
+DESCRIPTION: This commit updates the `gotrue` dependency to a newer version. This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_14
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping storage3 dependency
+DESCRIPTION: This commit updates the `storage3` dependency to a newer version. This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_23
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping Version to v2.5.2
+DESCRIPTION: This commit bumps the version of the supabase-py library to v2.5.2. This likely incorporates all preceding changes and fixes.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_0
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Implementing file upload testing
+DESCRIPTION: This test snippet verifies that the file upload functionality works correctly, specifically ensuring that files are properly uploaded with the right metadata and content type, essential for data integrity.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_62
+
+LANGUAGE: Python
+CODE:
+```
+test: ensure upload files works properly ([`0ba494c`](https://github.com/supabase-community/supabase-py/commit/0ba494cf62c2923b3903cee1651be8abebb454d1))
+```
+
+----------------------------------------
+
+TITLE: Fix - add &#34;verify&#34; flag to client
+DESCRIPTION: This commit adds the &#34;verify&#34; flag to the client creation process, which allows to control SSL verification.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_30
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping Version to v2.5.0
+DESCRIPTION: This commit bumps the version of the supabase-py library to v2.5.0.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_31
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping Version to v2.5.1
+DESCRIPTION: This commit bumps the version of the supabase-py library to v2.5.1.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_19
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping Version to v2.4.5
+DESCRIPTION: This commit bumps the version of the supabase-py library to v2.4.5.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_40
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Fix user session in create factory method
+DESCRIPTION: This commit fixes an issue related to resolving the user session inside the create factory method. This should improve the reliability and correctness of the session handling.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_18
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping supafunc dependency
+DESCRIPTION: This commit updates the `supafunc` dependency to a newer version. This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_3
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping storage3 dependency
+DESCRIPTION: This commit updates the `storage3` dependency to a newer version. This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_2
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping postgrest dependency
+DESCRIPTION: This commit updates the `postgrest` dependency to a newer version. This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_25
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping commitizen dependency (dev)
+DESCRIPTION: This commit updates the `commitizen` dependency to a newer version (dev). This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_35
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Fix - bump commitizen (dev)
+DESCRIPTION: This commit updates the `commitizen` dependency to a newer version (dev). This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_42
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping pytest dependency (dev)
+DESCRIPTION: This commit updates the `pytest` dependency to a newer version (dev). This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_36
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Dependabot Configuration for Requests Bump
+DESCRIPTION: This YAML snippet, part of a Dependabot update message, specifies the details of the updated dependency 'requests'. It indicates that 'requests' is an indirect dependency.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_55
+
+LANGUAGE: yaml
+CODE:
+```
+updated-dependencies:
+- dependency-name: requests
+  dependency-type: indirect
+```
+
+----------------------------------------
+
+TITLE: fix: refactor create_client functions
+DESCRIPTION: This commit refactors the `create_client` functions to call the constructor directly. This should improve code clarity and potentially performance.  It is likely a code style improvement.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_39
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping python-semantic-release dependency
+DESCRIPTION: This commit updates the `python-semantic-release` dependency to a newer version. This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_22
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping python-semantic-release dependency
+DESCRIPTION: This commit updates the `python-semantic-release` dependency to a newer version. This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_13
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping gotrue dependency
+DESCRIPTION: This commit updates the `gotrue` dependency to a newer version. This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_4
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Bumping python-semantic-release dependency
+DESCRIPTION: This commit updates the `python-semantic-release` dependency to a newer version. This ensures that the project uses the latest features and security patches.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_38
+
+LANGUAGE: Python
+CODE:
+```
+N/A
+```
+
+----------------------------------------
+
+TITLE: Creating a mime type extension for file uploads
+DESCRIPTION: This snippet introduces a feature to specify mime types during file uploads, enabling proper content-type handling which is crucial for correct server-side processing and compatibility with various file formats.
+SOURCE: https://github.com/supabase/supabase-py/blob/main/CHANGELOG.md#_snippet_61
+
+LANGUAGE: Python
+CODE:
+```
+feat: add mime type to uploaded files
+```
